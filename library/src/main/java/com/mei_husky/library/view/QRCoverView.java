@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.mei_husky.library.R;
 import com.mei_husky.library.util.DpUtils;
 
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
@@ -41,22 +42,22 @@ public class QRCoverView extends View {
 
     DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-    left = (displayMetrics.widthPixels - DpUtils.dip2px(context, 540)) / 2;
-    top = (displayMetrics.heightPixels - DpUtils.dip2px(context, 540)) / 3;
+    left = (displayMetrics.widthPixels - DpUtils.dip2px(context, 180)) / 2;
+    top = (displayMetrics.heightPixels - DpUtils.dip2px(context, 180)) / 3;
 //    Log.i("tag","屏幕宽高=" + displayMetrics.widthPixels + "*" + displayMetrics.heightPixels );
 //    Log.i("tag","扫描区域 left & top=" + left + "  &  " + top );
 //    Log.i("tag","矩形区域 宽高=" + DpUtils.dip2px(context, 540) + "  *  " + DpUtils.dip2px(context, 540) );
 //    top = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 28, displayMetrics);
 //    left = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 40, displayMetrics);
-    cornerH = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 48, displayMetrics);
-    cornerW = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 8, displayMetrics);
-    paint.setColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
-    cornerPaint.setColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_dark));
+    cornerH = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 16, displayMetrics);
+    cornerW = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 2, displayMetrics);
+    paint.setColor(ContextCompat.getColor(getContext(), R.color.cover_bg));
+    cornerPaint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
   }
 
   @Override
   protected void onDraw(Canvas canvas) {
-    viewFinderRect = new RectF(left, top, left + DpUtils.dip2px(context, 540), top + DpUtils.dip2px(context, 540));
+    viewFinderRect = new RectF(left, top, left + DpUtils.dip2px(context, 180), top + DpUtils.dip2px(context, 180));
 
     canvas.drawRect(0, 0, viewFinderRect.left, getHeight(), paint);
     canvas.drawRect(viewFinderRect.left, 0, getWidth(), viewFinderRect.top, paint);
