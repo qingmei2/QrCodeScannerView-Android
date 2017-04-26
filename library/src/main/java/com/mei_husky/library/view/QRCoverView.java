@@ -43,9 +43,9 @@ public class QRCoverView extends View {
 
     left = (displayMetrics.widthPixels - DpUtils.dip2px(context, 540)) / 2;
     top = (displayMetrics.heightPixels - DpUtils.dip2px(context, 540)) / 3;
-    Log.i("tag","屏幕宽高=" + displayMetrics.widthPixels + "*" + displayMetrics.heightPixels );
-    Log.i("tag","扫描区域 left & top=" + left + "  &  " + top );
-    Log.i("tag","矩形区域 宽高=" + DpUtils.dip2px(context, 540) + "  *  " + DpUtils.dip2px(context, 540) );
+//    Log.i("tag","屏幕宽高=" + displayMetrics.widthPixels + "*" + displayMetrics.heightPixels );
+//    Log.i("tag","扫描区域 left & top=" + left + "  &  " + top );
+//    Log.i("tag","矩形区域 宽高=" + DpUtils.dip2px(context, 540) + "  *  " + DpUtils.dip2px(context, 540) );
 //    top = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 28, displayMetrics);
 //    left = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 40, displayMetrics);
     cornerH = TypedValue.applyDimension(COMPLEX_UNIT_DIP, 48, displayMetrics);
