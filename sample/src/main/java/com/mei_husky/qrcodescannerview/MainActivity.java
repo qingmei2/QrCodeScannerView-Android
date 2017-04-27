@@ -1,10 +1,16 @@
 package com.mei_husky.qrcodescannerview;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mei_husky.library.view.QRCodeScannerView;
 import com.mei_husky.library.view.QRCoverView;
@@ -14,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private QRCodeScannerView mScannerView;
     private QRCoverView mCoverView;
     private Button mBtnTest;
+
+    private final int PERMISSION_REQUEST_CAMERA = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +36,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnTest = (Button) findViewById(R.id.btn_test);
         mBtnTest.setOnClickListener(this);
 
+        //自动聚焦间隔2s
+        mScannerView.setAutofocusInterval(2000L);
+        //闪光灯
+        mScannerView.setTorchEnabled(true);
+        //扫描结果监听
         mScannerView.setOnQRCodeReadListener(new QRCodeScannerView.OnQRCodeScannerListener() {
             @Override
             public void onDecodeFinish(String text, PointF[] points) {
-
+                Toast.makeText(MainActivity.this,text,Toast.LENGTH_SHORT).show();
             }
         });
-        mScannerView.setAutofocusInterval(2000L);
-//        mScannerView.setTorchEnabled(true);
+        //相机权限监听
+        mScannerView.setOnCheckCameraPermissionListener(new QRCodeScannerView.OnCheckCameraPermissionListener() {
+            @Override
+            public boolean onCheckCameraPermission() {
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    return false;
+                }
+            }
+        });
+        //开启后置摄像头
         mScannerView.setBackCamera();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != PERMISSION_REQUEST_CAMERA) {
+            return;
+        }
+
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mScannerView.grantCameraPermission();
+        }
     }
 
     @Override
