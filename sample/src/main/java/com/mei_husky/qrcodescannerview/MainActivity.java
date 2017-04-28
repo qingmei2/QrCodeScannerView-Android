@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mScannerView.setBackCamera();
     }
 
+    /**
+     * 权限请求回调
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -92,12 +98,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test:
+                //切换扫描界面UI的样式
                 mCoverView.setCoverViewConnerFace(true)         //扫描边框在扫描框外部（默认为里部）
                         .setCoverViewCorner(40, 6, true)        //设置扫描边框的长度和厚度（单位是否为dp）
                         .setCoverViewCornerColor(R.color.colorAccent)//扫描边框的颜色
                         .setCoverViewScanner(220, 220)          //扫描框的宽度和高度
-                        .setCoverViewOutsideColor(R.color.colorPrimary)//修改扫描框外背景色
-                        .commitUi();                            //修改UI
+//                        .setCoverViewOutsideColor(R.color.colorPrimary)//修改扫描框外背景色
+                        .commitUi();//提交修改UI
+                mScannerView.switchCameraFace();
                 break;
         }
     }

@@ -36,66 +36,10 @@ import static android.hardware.Camera.getCameraInfo;
 public class QRCodeScannerView extends SurfaceView
         implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
-    /****************************************************
-     *          接口回调（你需要实现的接口）
-     ****************************************************/
-    /**
-     * 二维码解析结果接口
-     */
-    public interface OnQRCodeScannerListener {
-        void onDecodeFinish(String text, PointF[] points);
-    }
-
-    private OnQRCodeScannerListener mOnQRCodeScannerListener;
-
-    /**
-     * 添加二维码解析结果监听
-     *
-     * @param onQRCodeScannerListener
-     */
-    public void setOnQRCodeReadListener(OnQRCodeScannerListener onQRCodeScannerListener) {
-        mOnQRCodeScannerListener = onQRCodeScannerListener;
-    }
-
-    /**
-     * 相机权限接口
-     */
-    public interface OnCheckCameraPermissionListener {
-        boolean onCheckCameraPermission();
-    }
-
-    /**
-     * 相机权限监听器
-     */
-    private OnCheckCameraPermissionListener onCheckCameraPermissionListener;
-
-    /**
-     * 添加相机权限监听
-     *
-     * @param listener
-     */
-    public void setOnCheckCameraPermissionListener(OnCheckCameraPermissionListener listener) {
-        this.onCheckCameraPermissionListener = listener;
-    }
-
-    /**
-     * 被告知相机权限已授予
-     */
-    public void grantCameraPermission() {
-        if (hasCameraPermission)
-            return;
-        else
-            hasCameraPermission = true;
-
-        if (getHolder().getSurface() != null) {
-            surfaceCreated(getHolder());
-            surfaceChanged(getHolder(), 0, 0, 0);
-        }
-    }
-
     private static final String TAG = QRCodeScannerView.class.getName();
 
     private boolean hasCameraPermission = false;  //是否拥有相机权限
+    private int face = -1;  //前置/后置摄像头
     private QRCodeReader mQRCodeReader;
     private int mPreviewWidth;        //View预览宽度
     private int mPreviewHeight;       //View预览高度
@@ -203,6 +147,7 @@ public class QRCodeScannerView extends SurfaceView
      */
     public void setBackCamera() {
         setPreviewCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
+        face = Camera.CameraInfo.CAMERA_FACING_BACK;
     }
 
     /**
@@ -210,6 +155,7 @@ public class QRCodeScannerView extends SurfaceView
      */
     public void setFrontCamera() {
         setPreviewCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        face = Camera.CameraInfo.CAMERA_FACING_FRONT;
     }
 
     @Override
@@ -222,8 +168,55 @@ public class QRCodeScannerView extends SurfaceView
         }
     }
 
+    /**
+     * 切换到前置/后置摄像头
+     */
+    public void switchCameraFace() {
+        int cameraCount = 0;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        cameraCount = Camera.getNumberOfCameras();//得到摄像头的个数
+        Camera camera = mCameraManager.getOpenCamera().getCamera();
+
+        for (int i = 0; i < cameraCount; i++) {
+            Camera.getCameraInfo(i, cameraInfo);//得到每一个摄像头的信息
+            if (face == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                //现在是后置，变更为前置
+                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    camera.stopPreview();//停掉原来摄像头的预览
+                    camera.release();//释放资源
+                    camera = null;//取消原来摄像头
+                    camera = Camera.open(i);//打开当前选中的摄像头
+                    try {
+                        camera.setPreviewDisplay(getHolder());//通过surfaceview显示取景画面
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    camera.startPreview();//开始预览
+                    face = Camera.CameraInfo.CAMERA_FACING_FRONT;
+                    break;
+                }
+            } else {
+                //现在是前置， 变更为后置
+                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    camera.stopPreview();//停掉原来摄像头的预览
+                    camera.release();//释放资源
+                    camera = null;//取消原来摄像头
+                    camera = Camera.open(i);//打开当前选中的摄像头
+                    try {
+                        camera.setPreviewDisplay(getHolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    camera.startPreview();
+                    face = Camera.CameraInfo.CAMERA_FACING_BACK;
+                    break;
+                }
+            }
+        }
+    }
+
     /****************************************************
-     * SurfaceHolder.Callback,Camera.PreviewCallback
+     *   SurfaceHolder.Callback接口，处理Camera相关逻辑
      ****************************************************/
 
     @Override
@@ -310,6 +303,7 @@ public class QRCodeScannerView extends SurfaceView
     /**
      * Check if this device has a camera
      */
+
     private boolean checkCameraHardware() {
         if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             // this device has a camera
@@ -422,7 +416,7 @@ public class QRCodeScannerView extends SurfaceView
         }
 
         /**
-         * 将结果转换为SurfaceView的坐标（也就是QRCodeScannerView的坐标）
+         * 将结果转换为SurfaceView的坐标（QRCodeScannerView的坐标）
          * <p>
          * This method is needed because coordinates are given in landscape camera coordinates when
          * device is in portrait mode and different coordinates otherwise.
@@ -443,4 +437,64 @@ public class QRCodeScannerView extends SurfaceView
                     cameraPreviewSize);
         }
     }
+
+
+    /****************************************************
+     *          接口回调（你需要实现的接口）
+     ****************************************************/
+
+    /**
+     * 二维码解析结果接口
+     */
+    public interface OnQRCodeScannerListener {
+        void onDecodeFinish(String text, PointF[] points);
+    }
+
+    private OnQRCodeScannerListener mOnQRCodeScannerListener;
+
+    /**
+     * 添加二维码解析结果监听
+     *
+     * @param onQRCodeScannerListener
+     */
+    public void setOnQRCodeReadListener(OnQRCodeScannerListener onQRCodeScannerListener) {
+        mOnQRCodeScannerListener = onQRCodeScannerListener;
+    }
+
+    /**
+     * 相机权限接口
+     */
+    public interface OnCheckCameraPermissionListener {
+        boolean onCheckCameraPermission();
+    }
+
+    /**
+     * 相机权限监听器
+     */
+    private OnCheckCameraPermissionListener onCheckCameraPermissionListener;
+
+    /**
+     * 添加相机权限监听
+     *
+     * @param listener
+     */
+    public void setOnCheckCameraPermissionListener(OnCheckCameraPermissionListener listener) {
+        this.onCheckCameraPermissionListener = listener;
+    }
+
+    /**
+     * 被告知相机权限已授予
+     */
+    public void grantCameraPermission() {
+        if (hasCameraPermission)
+            return;
+        else
+            hasCameraPermission = true;
+
+        if (getHolder().getSurface() != null) {
+            surfaceCreated(getHolder());
+            surfaceChanged(getHolder(), 0, 0, 0);
+        }
+    }
+
 }

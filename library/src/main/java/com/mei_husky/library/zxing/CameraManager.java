@@ -50,7 +50,7 @@ public final class CameraManager {
   // since we're using our own interface.
   // FramingRects references are also removed from original ZXING authors work,
   // since We're using all view size while detecting QR-Codes.
-  private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
+  public int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
   private long autofocusIntervalInMs = AutoFocusManager.DEFAULT_AUTO_FOCUS_INTERVAL_MS;   //自动对焦间隔
 
   public CameraManager(Context context) {
@@ -233,5 +233,9 @@ public final class CameraManager {
    */
   public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
     return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
+  }
+
+  public OpenCamera getOpenCamera(){
+    return openCamera;
   }
 }
