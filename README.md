@@ -18,6 +18,7 @@ allprojects {
 ```
 dependencies {
     compile 'com.github.ButQingMei:QrCodeScannerView-Android:1.0'
+    compile 'com.google.zxing:core:3.2.1'
 }
 ```
 
