@@ -90,6 +90,7 @@ public class QRCodeScannerView extends SurfaceView
      * Starts camera preview and decoding
      */
     public void startCamera() {
+        Log.d(TAG, "startCamera");
         mCameraManager.startPreview();
     }
 
@@ -146,6 +147,7 @@ public class QRCodeScannerView extends SurfaceView
      * Camera preview from device back camera
      */
     public void setBackCamera() {
+        Log.d(TAG, "setBackCamera");
         setPreviewCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
         face = Camera.CameraInfo.CAMERA_FACING_BACK;
     }
@@ -172,47 +174,33 @@ public class QRCodeScannerView extends SurfaceView
      * 切换到前置/后置摄像头
      */
     public void switchCameraFace() {
-        int cameraCount = 0;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        cameraCount = Camera.getNumberOfCameras();//得到摄像头的个数
-        Camera camera = mCameraManager.getOpenCamera().getCamera();
+        releaseCamera();
+        face = face == Camera.CameraInfo.CAMERA_FACING_FRONT ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
+        openCamera(face);
+    }
 
-        for (int i = 0; i < cameraCount; i++) {
-            Camera.getCameraInfo(i, cameraInfo);//得到每一个摄像头的信息
-            if (face == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                //现在是后置，变更为前置
-                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                    camera.stopPreview();//停掉原来摄像头的预览
-                    camera.release();//释放资源
-                    camera = null;//取消原来摄像头
-                    camera = Camera.open(i);//打开当前选中的摄像头
-                    try {
-                        camera.setPreviewDisplay(getHolder());//通过surfaceview显示取景画面
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    camera.startPreview();//开始预览
-                    face = Camera.CameraInfo.CAMERA_FACING_FRONT;
-                    break;
-                }
-            } else {
-                //现在是前置， 变更为后置
-                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                    camera.stopPreview();//停掉原来摄像头的预览
-                    camera.release();//释放资源
-                    camera = null;//取消原来摄像头
-                    camera = Camera.open(i);//打开当前选中的摄像头
-                    try {
-                        camera.setPreviewDisplay(getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    camera.startPreview();
-                    face = Camera.CameraInfo.CAMERA_FACING_BACK;
-                    break;
-                }
-            }
+    /**
+     * 打开对应相机资源
+     */
+    private void openCamera(int cameraFace) {
+        try {
+            mCameraManager.setPreviewCameraId(cameraFace);
+            mCameraManager.openDriver(getHolder(), this.getWidth(), this.getHeight());
+            mCameraManager.setDisplayOrientation(getCameraDisplayOrientation());
+            mCameraManager.startPreview();
+            mCameraManager.setPreviewCallback(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * 释放相机资源
+     */
+    private void releaseCamera() {
+        mCameraManager.setPreviewCallback(null);
+        mCameraManager.stopPreview();
+        mCameraManager.closeDriver();
     }
 
     /****************************************************
@@ -235,6 +223,7 @@ public class QRCodeScannerView extends SurfaceView
 
         try {
             // Indicate camera, our View dimensions
+            Log.d(TAG, "mCameraManager.openDriver");
             mCameraManager.openDriver(holder, this.getWidth(), this.getHeight());
         } catch (IOException e) {
             Log.w(TAG, "Can not openDriver: " + e.getMessage());
@@ -391,7 +380,7 @@ public class QRCodeScannerView extends SurfaceView
             } catch (ChecksumException e) {
                 Log.d(TAG, "ChecksumException", e);
             } catch (NotFoundException e) {
-//        Log.d(TAG, "No QR Code found");
+//                Log.d(TAG, "No QR Code found");
             } catch (FormatException e) {
                 Log.d(TAG, "FormatException", e);
             } finally {
