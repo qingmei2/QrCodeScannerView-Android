@@ -54,24 +54,7 @@ mScannerView.setTorchEnabled(true);
 mScannerView.setOnQRCodeReadListener(new QRCodeScannerView.OnQRCodeScannerListener() {
     @Override
     public void onDecodeFinish(String text, PointF[] points) {
-        Log.d("tag", "扫描结果 ： " + text);   //扫描到的内容
-        
-        //接下来是处理二维码是否在扫描框中的逻辑
-        RectF finderRect = mCoverView.getViewFinderRect();
-        Log.d("tag", "points.length = " + points.length);
-        boolean isContain = true;
-        //依次判断扫描结果的每个point是否都在扫描框内
-        for (int i = 0, length = points.length; i < length; i++) {
-            if (!finderRect.contains(points[i].x, points[i].y)) {
-                isContain = false;  //只要有一个不在，说明二维码不完全在扫描框中
-                break;
-            }
-        }
-        if (isContain) {
-            Toast.makeText(MainActivity.this, "扫描成功！Result = " + text, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.this, "扫描失败！请将二维码图片摆放在正确的扫描区域中...", Toast.LENGTH_SHORT).show();
-        }
+        Log.d("tag", "扫描结果 ： " + text); 
     }
 });
 //相机权限监听
