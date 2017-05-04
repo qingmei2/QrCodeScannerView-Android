@@ -74,4 +74,9 @@ mScannerView.setOnCheckCameraPermissionListener(new QRCodeScannerView.OnCheckCam
 mScannerView.setBackCamera();
 ```
 
-
+## 二、接口
+### 1、QRCodeScannerView
+1.打开开关
+```
+setQRDecodingEnabled(boolean qrDecodingEnabled)
+```
