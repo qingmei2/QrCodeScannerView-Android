@@ -21,7 +21,10 @@ dependencies {
     compile 'com.google.zxing:core:3.2.1'
 }
 ```
-### 3.直接在你的布局文件xml中使用QRCodeScannerView（二维码扫描业务层View，主要处理Camera扫描二维码相关逻辑）和QRCoverView(二维码扫描UI层View，主要负责对应UI的改变，比如扫描框大小，背景颜色，扫描框边角大小颜色等等):
+### 3.直接在你的布局文件xml中使用
+QRCodeScannerView（二维码扫描业务层View，主要处理Camera扫描二维码相关逻辑）
+
+QRCoverView(二维码扫描UI层View，主要负责对应UI的改变，比如扫描框大小，背景颜色，扫描框边角大小颜色等等):
 ```
  <FrameLayout
         android:id="@+id/fl_container"
@@ -38,6 +41,7 @@ dependencies {
             android:id="@+id/cover_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+            
 </FrameLayout>
 ```
 
