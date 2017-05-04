@@ -34,10 +34,6 @@ public class QRCoverView extends View {
     //扫描边框是否包裹扫描框
     private boolean isCornerOutside = false;
 
-    public RectF getViewFinderRect() {
-        return viewFinderRect;
-    }
-
     private RectF viewFinderRect;
 
     public QRCoverView(Context context, AttributeSet attrs) {
@@ -214,4 +210,13 @@ public class QRCoverView extends View {
         Log.i("tag", "扫描框大小（h/w）=" + scannerW + "/" + scannerH);
         invalidate();
     }
+
+    /**
+     * 获得扫描框的坐标Rect
+     * @return
+     */
+    public RectF getViewFinderRect() {
+        return viewFinderRect;
+    }
+
 }

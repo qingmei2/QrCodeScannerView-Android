@@ -3,11 +3,13 @@ package com.mei_husky.qrcodescannerview;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -40,11 +42,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mScannerView.setAutofocusInterval(2000L);
         //闪光灯
         mScannerView.setTorchEnabled(true);
-        //扫描结果监听
+        //扫描结果监听处理
         mScannerView.setOnQRCodeReadListener(new QRCodeScannerView.OnQRCodeScannerListener() {
             @Override
             public void onDecodeFinish(String text, PointF[] points) {
-                Toast.makeText(MainActivity.this,text,Toast.LENGTH_SHORT).show();
+                Log.d("tag", "扫描结果 ： " + text);
+                RectF finderRect = mCoverView.getViewFinderRect();
+                Log.d("tag", "points.length = " + points.length);
+                boolean isContain = true;
+                //依次判断扫描结果的每个point是否都在扫描框内
+                for (int i = 0, length = points.length; i < length; i++) {
+                    if (!finderRect.contains(points[i].x, points[i].y)) {
+                        isContain = false;  //只要有一个不在，说明二维码不完全在扫描框中
+                        break;
+                    }
+                }
+                if (isContain) {
+                    Toast.makeText(MainActivity.this, "扫描成功！Result = " + text, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "扫描失败！请将二维码图片摆放在正确的扫描区域中...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         //相机权限监听
@@ -55,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         == PackageManager.PERMISSION_GRANTED) {
                     return true;
                 } else {
-                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
                     return false;
                 }
             }
@@ -66,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 权限请求回调
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -105,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setCoverViewScanner(220, 220)          //扫描框的宽度和高度
 //                        .setCoverViewOutsideColor(R.color.colorPrimary)//修改扫描框外背景色
                         .commitUi();//提交修改UI
-                mScannerView.switchCameraFace();
+                mScannerView.switchCameraFace();//切换摄像头0
                 break;
         }
     }

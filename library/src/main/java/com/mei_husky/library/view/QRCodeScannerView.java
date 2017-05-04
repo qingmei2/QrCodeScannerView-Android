@@ -175,9 +175,11 @@ public class QRCodeScannerView extends SurfaceView
      */
     public void switchCameraFace() {
         releaseCamera();
+        //如果是前置,切换到后置;反之亦然
         face = face == Camera.CameraInfo.CAMERA_FACING_FRONT ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
         openCamera(face);
     }
+
 
     /**
      * 打开对应相机资源
@@ -436,7 +438,12 @@ public class QRCodeScannerView extends SurfaceView
      * 二维码解析结果接口
      */
     public interface OnQRCodeScannerListener {
-        void onDecodeFinish(String text, PointF[] points);
+        /**
+         *
+         * @param scanResult 二维码扫描结果
+         * @param points 二维码坐标集合
+         */
+        void onDecodeFinish(String scanResult, PointF[] points);
     }
 
     private OnQRCodeScannerListener mOnQRCodeScannerListener;
