@@ -2,8 +2,13 @@ package com.mei_husky.library.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Region;
+import android.graphics.Shader;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -11,15 +16,27 @@ import android.util.Log;
 import android.view.View;
 
 import com.mei_husky.library.R;
-import com.mei_husky.library.util.DpUtils;
+import com.mei_husky.library.util.ScannerDpUtils;
 
 /**
  * 这个View覆盖于QRCodeScannerView之上，用于UI的绘制，比如扫描框，扫描线,扫描框内外的背景颜色以及透明度等等。
  */
 public class QRCoverView extends View {
 
+    //背景色
     private final Paint paint = new Paint();
+    //扫描边框角的颜色
     private final Paint cornerPaint = new Paint();
+
+
+    //扫描线相关属性,设置方式详见以下方法：
+    /**     {@link QRCoverView#drawLaserLine     */
+
+    private final Paint laserPaint = new Paint();   //扫描线Paint
+    private boolean showLaser = true;      //是否显示扫描线
+    private float laserStartH = 0f;        //扫描线初始位置
+    private int laserChangeBounds = 30;    //渐变线的默认高度，默认30px
+    private int laserChangeTime = 40;      //UI刷新间隔
 
     //扫描框的宽和高
     private float scannerW;
@@ -42,13 +59,13 @@ public class QRCoverView extends View {
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-        //默认大小为180dp
-        left = (displayMetrics.widthPixels - DpUtils.dip2px(context, 180)) / 2;
-        top = (displayMetrics.heightPixels - DpUtils.dip2px(context, 180)) / 3;
+        //默认扫描框大小为180dp,分母为扫描框所处View位置的大概比例，若有需求可以自己修改
+        left = (displayMetrics.widthPixels - ScannerDpUtils.dip2px(context, 180)) / 2;
+        top = (displayMetrics.heightPixels - ScannerDpUtils.dip2px(context, 180)) / 3;
         //默认扫描框为16dp长，3dp宽
-        cornerH = DpUtils.dip2px(context, 16);
-        cornerW = DpUtils.dip2px(context, 3);
-        //默认背景色和扫描边框颜色
+        cornerH = ScannerDpUtils.dip2px(context, 16);
+        cornerW = ScannerDpUtils.dip2px(context, 3);
+        //默认背景色和扫描边框颜色（请在自己项目的res.values.color下进行设置）
         paint.setColor(ContextCompat.getColor(getContext(), R.color.cover_bg));
         cornerPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
     }
@@ -57,12 +74,53 @@ public class QRCoverView extends View {
     protected void onDraw(Canvas canvas) {
         //默认扫描框为180dp
         if (scannerW == 0f || scannerH == 0f) {
-            viewFinderRect = new RectF(left, top, left + DpUtils.dip2px(context, 180), top + DpUtils.dip2px(context, 180));
+            viewFinderRect = new RectF(left, top, left + ScannerDpUtils.dip2px(context, 180), top + ScannerDpUtils.dip2px(context, 180));
         } else {
             viewFinderRect = new RectF(left, top, left + scannerW, top + scannerH);
         }
+        //绘制背景色
         drawScanBackground(canvas, viewFinderRect);
+        //绘制扫描边框
         drawScanCorner(canvas, viewFinderRect);
+        //绘制扫描线
+        drawLaserLine(canvas, viewFinderRect, showLaser);
+    }
+
+    /**
+     * 绘制扫描线
+     *
+     * @param canvas
+     * @param viewFinderRect 扫描框的Rect
+     * @param showLaser      是否显示扫描线
+     */
+    private void drawLaserLine(Canvas canvas, RectF viewFinderRect, boolean showLaser) {
+        if (showLaser) {
+            //显示并绘制扫描线
+            Path mPath = new Path();
+            laserPaint.setAntiAlias(true);
+            laserPaint.setColor(Color.TRANSPARENT);
+            laserPaint.setAlpha(255);
+
+            laserStartH += 10;
+            mPath.reset();
+            canvas.clipPath(mPath);
+            mPath.addRect(viewFinderRect, Path.Direction.CW);
+            canvas.clipPath(mPath, Region.Op.REPLACE);
+            //渐变色的扫描线（白色->透明）
+            LinearGradient linearGradient = new LinearGradient(0, laserStartH - laserChangeBounds, 0, laserStartH, new int[]{Color.TRANSPARENT, Color.WHITE}, null, Shader.TileMode.CLAMP);
+            //给扫描线Paint设置着色器并绘制
+            laserPaint.setShader(linearGradient);
+            canvas.drawRect(0, laserStartH - laserChangeBounds, getWidth(), laserStartH, laserPaint);
+
+            //当扫描线达到扫描框底部时，返回扫描线返回顶部
+            if (laserStartH >= viewFinderRect.bottom || laserStartH <= viewFinderRect.top) {
+                laserStartH = viewFinderRect.top;
+            }
+        } else {
+            //不显示扫描线,重置扫描线
+            laserStartH = 0;
+        }
+        postInvalidateDelayed(laserChangeTime);//每隔一段时间刷新一次UI
     }
 
     /**
@@ -154,8 +212,8 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewCorner(int cornerH, int cornerW, boolean isDp) {
         if (isDp) {
-            this.cornerH = DpUtils.dip2px(context, cornerH);
-            this.cornerW = DpUtils.dip2px(context, cornerW);
+            this.cornerH = ScannerDpUtils.dip2px(context, cornerH);
+            this.cornerW = ScannerDpUtils.dip2px(context, cornerW);
         } else {
             this.cornerH = cornerH;
             this.cornerW = cornerW;
@@ -164,7 +222,7 @@ public class QRCoverView extends View {
     }
 
     /**
-     * 设置扫描边框宽高（像素）
+     * 设置扫描边框宽高（像素）{@link QRCoverView#setCoverViewCorner(int, int, boolean)}
      */
     public QRCoverView setCoverViewCorner(int cornerH, int cornerW) {
         return setCoverViewCorner(cornerH, cornerW, false);
@@ -178,8 +236,8 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewScanner(int width, int height) {
         //配置扫描框的宽高
-        this.scannerH = DpUtils.dip2px(context, height);
-        this.scannerW = DpUtils.dip2px(context, width);
+        this.scannerH = ScannerDpUtils.dip2px(context, height);
+        this.scannerW = ScannerDpUtils.dip2px(context, width);
         //重新获取扫描框的左边距和上边距
         left = (getResources().getDisplayMetrics().widthPixels - scannerW) / 2;
         top = (getResources().getDisplayMetrics().heightPixels - scannerH) / 3;
@@ -213,10 +271,22 @@ public class QRCoverView extends View {
 
     /**
      * 获得扫描框的坐标Rect
+     *
      * @return
      */
     public RectF getViewFinderRect() {
         return viewFinderRect;
+    }
+
+    /**
+     * 设置扫描线是否显示
+     *
+     * @param showLaser
+     * @return
+     */
+    public QRCoverView setShowLaser(boolean showLaser) {
+        this.showLaser = showLaser;
+        return this;
     }
 
 }

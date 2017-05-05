@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        mScannerView = (QRCodeScannerView) findViewById(R.id.scanner_view);
-        mCoverView = (QRCoverView) findViewById(R.id.cover_view);
         mBtnTest = (Button) findViewById(R.id.btn_test);
         mBtnTest.setOnClickListener(this);
+
+        mScannerView = (QRCodeScannerView) findViewById(R.id.scanner_view);
+        mCoverView = (QRCoverView) findViewById(R.id.cover_view);
 
         //自动聚焦间隔2s
         mScannerView.setAutofocusInterval(2000L);
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mScannerView.setOnQRCodeReadListener(new QRCodeScannerView.OnQRCodeScannerListener() {
             @Override
             public void onDecodeFinish(String text, PointF[] points) {
-                Log.d("tag", "扫描结果 ： " + text);
+                Log.d("tag", "扫描结果 ： " + text); //扫描到的内容
+                //接下来是处理二维码是否在扫描框中的逻辑
                 RectF finderRect = mCoverView.getViewFinderRect();
                 Log.d("tag", "points.length = " + points.length);
                 boolean isContain = true;
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setCoverViewCorner(40, 6, true)        //设置扫描边框的长度和厚度（单位是否为dp）
                         .setCoverViewCornerColor(R.color.colorAccent)//扫描边框的颜色
                         .setCoverViewScanner(220, 220)          //扫描框的宽度和高度
+                        .setShowLaser(false)                    //不显示扫描线
 //                        .setCoverViewOutsideColor(R.color.colorPrimary)//修改扫描框外背景色
                         .commitUi();//提交修改UI
                 mScannerView.switchCameraFace();//切换摄像头0
