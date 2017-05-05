@@ -1,11 +1,11 @@
 # QrCodeScannerView-Android
-
 ## 目录
 * [功能简介](#功能简介)
 * [依赖和使用](#依赖和使用)
 * [效果示例](#效果示例)
 
 ## 功能简介
+
 QrCodeScannerView-Android是基于大名鼎鼎的Zxing二维码框架，在@dlazaro66大神开发的QRCodeReaderView上进行再次开发的一个二维码扫描Library，
 提供了二维码扫描相关功能，还可以自定义的二维码扫描框、扫描线、自定义UI布局等等。
 
@@ -25,6 +25,8 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] 我将会一直维护这个Library，完善其更多功能。如果有更多需求或者发现BUG，欢迎在Issues中提票！提前感谢！
 
 ## 依赖和使用
+[![](https://jitpack.io/v/ButQingMei/QrCodeScannerView-Android.svg)](https://jitpack.io/#ButQingMei/QrCodeScannerView-Android)
+
 ### 1.添加到你的 Project  Build.gradle:
 ```
 allprojects {
