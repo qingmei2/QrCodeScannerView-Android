@@ -9,14 +9,17 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Shader;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 
 import com.mei_husky.library.R;
 import com.mei_husky.library.util.ScannerDpUtils;
+
+import java.lang.ref.WeakReference;
 
 /**
  * 这个View覆盖于QRCodeScannerView之上，用于UI的绘制，比如扫描框，扫描线,扫描框内外的背景颜色以及透明度等等。
@@ -30,13 +33,17 @@ public class QRCoverView extends View {
 
 
     //扫描线相关属性,设置方式详见以下方法：
-    /**     {@link QRCoverView#drawLaserLine     */
+    /**
+     * {@link QRCoverView#drawLaserLine
+     */
 
     private final Paint laserPaint = new Paint();   //扫描线Paint
     private boolean showLaser = true;      //是否显示扫描线
     private float laserStartH = 0f;        //扫描线初始位置
     private int laserChangeBounds = 30;    //渐变线的默认高度，默认30px
     private int laserChangeTime = 40;      //UI刷新间隔
+
+    private QRHandler handler;
 
     //扫描框的宽和高
     private float scannerW;
@@ -50,7 +57,7 @@ public class QRCoverView extends View {
     private Context context;
     //扫描边框是否包裹扫描框
     private boolean isCornerOutside = false;
-
+    //扫描框的Rect
     private RectF viewFinderRect;
 
     public QRCoverView(Context context, AttributeSet attrs) {
@@ -68,6 +75,8 @@ public class QRCoverView extends View {
         //默认背景色和扫描边框颜色（请在自己项目的res.values.color下进行设置）
         paint.setColor(ContextCompat.getColor(getContext(), R.color.cover_bg));
         cornerPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+
+        handler = new QRHandler(this);
     }
 
     @Override
@@ -83,7 +92,8 @@ public class QRCoverView extends View {
         //绘制扫描边框
         drawScanCorner(canvas, viewFinderRect);
         //绘制扫描线
-        drawLaserLine(canvas, viewFinderRect, showLaser);
+        drawLaserLine(canvas, viewFinderRect);
+
     }
 
     /**
@@ -91,9 +101,8 @@ public class QRCoverView extends View {
      *
      * @param canvas
      * @param viewFinderRect 扫描框的Rect
-     * @param showLaser      是否显示扫描线
      */
-    private void drawLaserLine(Canvas canvas, RectF viewFinderRect, boolean showLaser) {
+    private void drawLaserLine(Canvas canvas, RectF viewFinderRect) {
         if (showLaser) {
             //显示并绘制扫描线
             Path mPath = new Path();
@@ -120,7 +129,7 @@ public class QRCoverView extends View {
             //不显示扫描线,重置扫描线
             laserStartH = 0;
         }
-        postInvalidateDelayed(laserChangeTime);//每隔一段时间刷新一次UI
+        handler.sendEmptyMessageDelayed(MESSAGE_LASER, laserChangeTime);//每隔一段时间之后重新绘制UI
     }
 
     /**
@@ -190,6 +199,7 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewOutsideColor(int colorRes) {
         paint.setColor(getResources().getColor(colorRes));
+        commitUi();
         return this;
     }
 
@@ -200,6 +210,7 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewCornerColor(int colorRes) {
         cornerPaint.setColor(getResources().getColor(colorRes));
+        commitUi();
         return this;
     }
 
@@ -218,6 +229,7 @@ public class QRCoverView extends View {
             this.cornerH = cornerH;
             this.cornerW = cornerW;
         }
+        commitUi();
         return this;
     }
 
@@ -225,7 +237,9 @@ public class QRCoverView extends View {
      * 设置扫描边框宽高（像素）{@link QRCoverView#setCoverViewCorner(int, int, boolean)}
      */
     public QRCoverView setCoverViewCorner(int cornerH, int cornerW) {
-        return setCoverViewCorner(cornerH, cornerW, false);
+        setCoverViewCorner(cornerH, cornerW, false);
+        commitUi();
+        return this;
     }
 
     /**
@@ -241,6 +255,7 @@ public class QRCoverView extends View {
         //重新获取扫描框的左边距和上边距
         left = (getResources().getDisplayMetrics().widthPixels - scannerW) / 2;
         top = (getResources().getDisplayMetrics().heightPixels - scannerH) / 3;
+        commitUi();
         return this;
     }
 
@@ -254,19 +269,8 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewConnerFace(boolean isOutside) {
         this.isCornerOutside = isOutside;
+        commitUi();
         return this;
-    }
-
-    /**
-     * 重新执行onDraw()
-     */
-    public void commitUi() {
-        Log.i("tag", "重新绘制...");
-        Log.i("tag", "扫描边框isOutSide=" + isCornerOutside);
-        Log.i("tag", "扫描边框大小（h/w）=" + cornerH + "/" + cornerW);
-        Log.i("tag", "扫描边框颜色...=" + cornerPaint.getColor());
-        Log.i("tag", "扫描框大小（h/w）=" + scannerW + "/" + scannerH);
-        invalidate();
     }
 
     /**
@@ -287,6 +291,32 @@ public class QRCoverView extends View {
     public QRCoverView setShowLaser(boolean showLaser) {
         this.showLaser = showLaser;
         return this;
+    }
+
+    private static final int MESSAGE_LASER = -1;
+
+    private void commitUi() {
+        //直接invalidate()，会导致重复绘制2次扫描线，所以我们先停止绘制扫描线
+        if (handler.hasMessages(MESSAGE_LASER)) {
+            handler.removeMessages(MESSAGE_LASER);
+        }
+        //重新执行onDraw
+        invalidate();
+    }
+
+    private static class QRHandler extends Handler {
+
+        WeakReference<QRCoverView> softReference;
+
+        public QRHandler(QRCoverView coverView) {
+            softReference = new WeakReference<QRCoverView>(coverView);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (MESSAGE_LASER == msg.what)
+                softReference.get().invalidate();
+        }
     }
 
 }

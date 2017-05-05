@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnTest;
 
     private final int PERMISSION_REQUEST_CAMERA = 0;
+    private Button mBtnTest2;
+    private Button mBtnTest3;
+    private Button mBtnTest4;
+    private Button mBtnTest5;
+    private Button mBtnTest6;
+    private Button mBtnTest7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        mBtnTest = (Button) findViewById(R.id.btn_test);
+        mBtnTest = (Button) findViewById(R.id.btn_test1);
         mBtnTest.setOnClickListener(this);
+        mBtnTest2 = (Button) findViewById(R.id.btn_test2);
+        mBtnTest2.setOnClickListener(this);
+        mBtnTest3 = (Button) findViewById(R.id.btn_test3);
+        mBtnTest3.setOnClickListener(this);
+        mBtnTest4 = (Button) findViewById(R.id.btn_test4);
+        mBtnTest4.setOnClickListener(this);
+        mBtnTest5 = (Button) findViewById(R.id.btn_test5);
+        mBtnTest5.setOnClickListener(this);
+        mBtnTest6 = (Button) findViewById(R.id.btn_test6);
+        mBtnTest6.setOnClickListener(this);
+        mBtnTest7 = (Button) findViewById(R.id.btn_test7);
+        mBtnTest7.setOnClickListener(this);
 
         mScannerView = (QRCodeScannerView) findViewById(R.id.scanner_view);
         mCoverView = (QRCoverView) findViewById(R.id.cover_view);
@@ -117,16 +135,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_test:
-                //切换扫描界面UI的样式
-                mCoverView.setCoverViewConnerFace(true)         //扫描边框在扫描框外部（默认为里部）
-                        .setCoverViewCorner(40, 6, true)        //设置扫描边框的长度和厚度（单位是否为dp）
-                        .setCoverViewCornerColor(R.color.colorAccent)//扫描边框的颜色
-                        .setCoverViewScanner(220, 220)          //扫描框的宽度和高度
-                        .setShowLaser(false)                    //不显示扫描线
-//                        .setCoverViewOutsideColor(R.color.colorPrimary)//修改扫描框外背景色
-                        .commitUi();//提交修改UI
-                mScannerView.switchCameraFace();//切换摄像头0
+            case R.id.btn_test1:
+                //扫描框的宽度和高度
+                mCoverView.setCoverViewScanner(220, 220);//提交修改UI
+                break;
+            case R.id.btn_test2:
+                mScannerView.switchCameraFace();//切换摄像头
+                break;
+            case R.id.btn_test3:
+                //修改扫描框外背景色
+                mCoverView.setCoverViewOutsideColor(R.color.colorPrimary);//提交修改UI
+                break;
+            case R.id.btn_test4:
+                //不显示扫描线
+                mCoverView.setShowLaser(false);
+                break;
+            case R.id.btn_test5:
+                //显示扫描线
+                mCoverView.setShowLaser(true);
+                break;
+            case R.id.btn_test6:
+                //扫描框边角在外
+                mCoverView.setCoverViewConnerFace(true);
+                break;
+            case R.id.btn_test7:
+                //停止扫描
+                mScannerView.setQRDecodingEnabled(false);
+                mCoverView.setShowLaser(false);//隐藏扫描线
                 break;
         }
     }
