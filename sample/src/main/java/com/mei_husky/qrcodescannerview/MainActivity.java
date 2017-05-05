@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_test3:
                 //修改扫描框外背景色
-                mCoverView.setCoverViewOutsideColor(R.color.colorPrimary);//提交修改UI
+                mCoverView.setCoverViewOutsideColor(R.color.cover_bg2
+                );//提交修改UI
                 break;
             case R.id.btn_test4:
                 //不显示扫描线
