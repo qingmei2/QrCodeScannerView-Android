@@ -39,7 +39,7 @@ allprojects {
 ### 2.添加到你的 Module  Build.gradle:
 ```
 dependencies {
-    compile 'com.github.ButQingMei:QrCodeScannerView-Android:1.1'
+    compile 'com.github.qingmei2:QrCodeScannerView-Android:1.1'
     compile 'com.google.zxing:core:3.2.1'
 }
 ```
