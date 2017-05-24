@@ -162,7 +162,7 @@ setCoverViewConnerFace(boolean isOutside)
 ```
 setCoverViewScanner(int width, int height)
 ```
-6.获得扫描框的坐标Rect
+6.获得扫描框的坐标Rect(判断所扫二维码是否在扫描框内等)
 ```
 RectF getViewFinderRect()
 ```
