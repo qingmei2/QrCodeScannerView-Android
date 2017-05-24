@@ -6,6 +6,7 @@
 
 ## 功能简介
 
+
 QrCodeScannerView-Android是基于大名鼎鼎的Zxing二维码框架，在@dlazaro66大神开发的QRCodeReaderView上进行再次开发的一个二维码扫描Library，
 提供了二维码扫描相关功能，还可以自定义的二维码扫描框、扫描线、自定义UI布局等等。
 
@@ -238,3 +239,5 @@ protected void onDraw(Canvas canvas) {
 6.停止扫描
 
 ![stopScan.gif](https://github.com/ButQingMei/QrCodeScannerView-Android/blob/master/pic/stopScan.gif)
+
+### 如果这个库对你的开发有所帮助，望请不吝star，如果遇到Bug或者建议，欢迎issue，我会第一时间进行回复，提前感谢，鞠躬！！！
