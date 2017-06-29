@@ -42,7 +42,6 @@ allprojects {
 ```
 dependencies {
     compile 'com.github.qingmei2:QrCodeScannerView-Android:1.1'
-    compile 'com.google.zxing:core:3.2.1'
 }
 ```
 ### 3.直接在你的布局文件xml中使用
