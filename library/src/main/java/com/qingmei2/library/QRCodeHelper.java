@@ -28,43 +28,42 @@ import static android.graphics.Color.BLACK;
 public class QRCodeHelper {
 
     public static void createQRCode2ImageView(Activity activity, String content, ImageView imageView) {
-        int mScreenWidth = 0;
-        Bitmap bitmap;
-        try {
-            /**
-             * 获取屏幕信息的区别
-             * 只有activity可以使用WindowManager否则应该使用Context.getResources().getDisplayMetrics()来获取。
-             * Context.getResources().getDisplayMetrics()依赖于手机系统，获取到的是系统的屏幕信息；
-             * WindowManager.getDefaultDisplay().getMetrics(dm)是获取到Activity的实际屏幕信息。
-             */
-            DisplayMetrics dm = new DisplayMetrics();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-            mScreenWidth = dm.widthPixels;
-
-            bitmap = createQRImage(content, mScreenWidth,
-//                    BitmapFactory.decodeResource(activity.getResources(), R.drawable.dog));//自己写的方法
-                    BitmapFactory.decodeResource(activity.getResources(), R.drawable.dog));//自己写的方法
-
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Bitmap bitmap = createQRCodeWithIcon(activity, content);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
         }
-
     }
 
-    //生成二维码图片（不带LOGO）
-    public static Bitmap createQRCode(String content, int widthAndHeight) throws WriterException {
-        Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
+    public static Bitmap createQRCodeWithIcon(Activity activity, String content) {
+        int mScreenWidth = 0;
+        Bitmap bitmap;
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        mScreenWidth = dm.widthPixels;
+
+        bitmap = createQRCode(content, mScreenWidth,
+                BitmapFactory.decodeResource(activity.getResources(), R.drawable.dog));
+        return bitmap;
+    }
+
+    /**
+     * Create QRCode not with ICON
+     *
+     * @param content QRCode content
+     * @param width   QRCode width
+     * @param height  QRCode height
+     * @return
+     * @throws WriterException
+     */
+    public static Bitmap createQRCode(String content, int width, int height) throws WriterException {
+        Hashtable<EncodeHintType, String> hints = new Hashtable<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
         BitMatrix matrix = new MultiFormatWriter().encode(content,
-                BarcodeFormat.QR_CODE, widthAndHeight, widthAndHeight);
+                BarcodeFormat.QR_CODE, width, height);
 
-        int width = matrix.getWidth();
-        int height = matrix.getHeight();
+        int width1 = matrix.getWidth();
+        int height1 = matrix.getHeight();
         int[] pixels = new int[width * height];
-        //画黑点
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (matrix.get(x, y)) {
@@ -79,7 +78,7 @@ public class QRCodeHelper {
     }
 
 
-    public static Bitmap createQRImage(String content, int heightPix, Bitmap logoBm) {
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logoBm) {
         try {
             //配置参数
             Map<EncodeHintType, Object> hints = new HashMap<>();
@@ -109,7 +108,7 @@ public class QRCodeHelper {
             bitmap.setPixels(pixels, 0, heightPix, 0, 0, heightPix, heightPix);
 
             if (logoBm != null) {
-                bitmap = addLogo(bitmap, logoBm);
+                bitmap = addIcon2QRCode(bitmap, logoBm);
             }
 
             //必须使用compress方法将bitmap保存到文件中再进行读取。直接返回的bitmap是没有任何压缩的，内存消耗巨大！
@@ -124,7 +123,7 @@ public class QRCodeHelper {
     /**
      * 在二维码中间添加Logo图案
      */
-    private static Bitmap addLogo(Bitmap src, Bitmap logo) {
+    private static Bitmap addIcon2QRCode(Bitmap src, Bitmap logo) {
         if (src == null) {
             return null;
         }

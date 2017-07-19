@@ -10,7 +10,7 @@ import com.qingmei2.library.QRCodeHelper;
 
 /**
  * Created by QingMei on 2017/7/19.
- * desc:如何生成二维码
+ * desc:create QrCode
  */
 
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {

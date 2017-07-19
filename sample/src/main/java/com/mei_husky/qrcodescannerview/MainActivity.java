@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 judgeResult(text, points);
             }
         });
-        //相机权限监听
+        //相机权限监听(如果你有相关的权限类，可以不实现该接口)
         mScannerView.setOnCheckCameraPermissionListener(new QRCodeScannerView.OnCheckCameraPermissionListener() {
             @Override
             public boolean onCheckCameraPermission() {
