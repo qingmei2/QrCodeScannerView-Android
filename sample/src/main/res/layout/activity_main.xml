@@ -76,5 +76,11 @@
                 android:text="停止扫描" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_test8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开SecondActivity" />
     </LinearLayout>
 </FrameLayout>

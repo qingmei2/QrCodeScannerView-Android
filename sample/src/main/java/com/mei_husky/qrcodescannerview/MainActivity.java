@@ -1,6 +1,7 @@
 package com.mei_husky.qrcodescannerview;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -11,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.qingmei2.library.view.QRCodeScannerView;
@@ -21,15 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private QRCodeScannerView mScannerView;
     private QRCoverView mCoverView;
-    private Button mBtnTest;
 
     private final int PERMISSION_REQUEST_CAMERA = 0;
-    private Button mBtnTest2;
-    private Button mBtnTest3;
-    private Button mBtnTest4;
-    private Button mBtnTest5;
-    private Button mBtnTest6;
-    private Button mBtnTest7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +32,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        mBtnTest = (Button) findViewById(R.id.btn_test1);
-        mBtnTest.setOnClickListener(this);
-        mBtnTest2 = (Button) findViewById(R.id.btn_test2);
-        mBtnTest2.setOnClickListener(this);
-        mBtnTest3 = (Button) findViewById(R.id.btn_test3);
-        mBtnTest3.setOnClickListener(this);
-        mBtnTest4 = (Button) findViewById(R.id.btn_test4);
-        mBtnTest4.setOnClickListener(this);
-        mBtnTest5 = (Button) findViewById(R.id.btn_test5);
-        mBtnTest5.setOnClickListener(this);
-        mBtnTest6 = (Button) findViewById(R.id.btn_test6);
-        mBtnTest6.setOnClickListener(this);
-        mBtnTest7 = (Button) findViewById(R.id.btn_test7);
-        mBtnTest7.setOnClickListener(this);
+        findViewById(R.id.btn_test1).setOnClickListener(this);
+        findViewById(R.id.btn_test2).setOnClickListener(this);
+        findViewById(R.id.btn_test3).setOnClickListener(this);
+        findViewById(R.id.btn_test4).setOnClickListener(this);
+        findViewById(R.id.btn_test5).setOnClickListener(this);
+        findViewById(R.id.btn_test6).setOnClickListener(this);
+        findViewById(R.id.btn_test7).setOnClickListener(this);
+        findViewById(R.id.btn_test8).setOnClickListener(this);
 
         mScannerView = (QRCodeScannerView) findViewById(R.id.scanner_view);
         mCoverView = (QRCoverView) findViewById(R.id.cover_view);
@@ -66,22 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDecodeFinish(String text, PointF[] points) {
                 Log.d("tag", "扫描结果 ： " + text); //扫描到的内容
-                //接下来是处理二维码是否在扫描框中的逻辑
-                RectF finderRect = mCoverView.getViewFinderRect();
-                Log.d("tag", "points.length = " + points.length);
-                boolean isContain = true;
-                //依次判断扫描结果的每个point是否都在扫描框内
-                for (int i = 0, length = points.length; i < length; i++) {
-                    if (!finderRect.contains(points[i].x, points[i].y)) {
-                        isContain = false;  //只要有一个不在，说明二维码不完全在扫描框中
-                        break;
-                    }
-                }
-                if (isContain) {
-                    Toast.makeText(MainActivity.this, "扫描成功！Result = " + text, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "扫描失败！请将二维码图片摆放在正确的扫描区域中...", Toast.LENGTH_SHORT).show();
-                }
+                //【可选】判断二维码是否在扫描框中
+                judgeResult(text, points);
             }
         });
         //相机权限监听
@@ -99,6 +72,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         //开启后置摄像头
         mScannerView.setBackCamera();
+    }
+
+    private void judgeResult(String text, PointF[] points) {
+        //接下来是处理二维码是否在扫描框中的逻辑
+        RectF finderRect = mCoverView.getViewFinderRect();
+        Log.d("tag", "points.length = " + points.length);
+        boolean isContain = true;
+        //依次判断扫描结果的每个point是否都在扫描框内
+        for (int i = 0, length = points.length; i < length; i++) {
+            if (!finderRect.contains(points[i].x, points[i].y)) {
+                isContain = false;  //只要有一个不在，说明二维码不完全在扫描框中
+                break;
+            }
+        }
+        if (isContain) {
+            Toast.makeText(MainActivity.this, "扫描成功！Result = " + text, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, "扫描失败！请将二维码图片摆放在正确的扫描区域中...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -163,6 +155,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //停止扫描
                 mScannerView.setQRDecodingEnabled(false);
                 mCoverView.setShowLaser(false);//隐藏扫描线
+                break;
+            case R.id.btn_test8:
+                startActivity(new Intent(this, SecondActivity.class));
                 break;
         }
     }
