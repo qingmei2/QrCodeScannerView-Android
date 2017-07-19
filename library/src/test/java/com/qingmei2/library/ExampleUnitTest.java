@@ -1,4 +1,4 @@
-package com.mei_husky.library;
+package com.qingmei2.library;
 
 import org.junit.Test;
 

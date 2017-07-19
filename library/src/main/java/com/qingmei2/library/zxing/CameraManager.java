@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mei_husky.library.zxing;
+package com.qingmei2.library.zxing;
 
 import android.content.Context;
 import android.graphics.Point;

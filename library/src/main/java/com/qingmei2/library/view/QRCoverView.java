@@ -1,4 +1,4 @@
-package com.mei_husky.library.view;
+package com.qingmei2.library.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,8 +16,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.mei_husky.library.R;
-import com.mei_husky.library.util.ScannerDpUtils;
+import com.qingmei2.library.R;
+import com.qingmei2.library.util.ScannerDpUtils;
 
 import java.lang.ref.WeakReference;
 

@@ -1,4 +1,4 @@
-package com.mei_husky.library.util;
+package com.qingmei2.library.util;
 
 import android.content.Context;
 

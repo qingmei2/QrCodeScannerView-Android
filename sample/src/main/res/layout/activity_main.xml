@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.mei_husky.qrcodescannerview.MainActivity">
 
-    <com.mei_husky.library.view.QRCodeScannerView
+    <com.qingmei2.library.view.QRCodeScannerView
         android:id="@+id/scanner_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.mei_husky.library.view.QRCoverView
+    <com.qingmei2.library.view.QRCoverView
         android:id="@+id/cover_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

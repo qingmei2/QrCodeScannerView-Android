@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.mei_husky.library.view.QRCodeScannerView;
-import com.mei_husky.library.view.QRCoverView;
+import com.qingmei2.library.view.QRCodeScannerView;
+import com.qingmei2.library.view.QRCoverView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

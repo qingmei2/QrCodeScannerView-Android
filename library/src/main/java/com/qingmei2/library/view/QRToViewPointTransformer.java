@@ -1,4 +1,4 @@
-package com.mei_husky.library.view;
+package com.qingmei2.library.view;
 
 import android.graphics.Point;
 import android.graphics.PointF;

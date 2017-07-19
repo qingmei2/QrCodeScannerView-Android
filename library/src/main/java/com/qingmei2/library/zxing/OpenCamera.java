@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mei_husky.library.zxing;
+package com.qingmei2.library.zxing;
 
 import android.hardware.Camera;
 

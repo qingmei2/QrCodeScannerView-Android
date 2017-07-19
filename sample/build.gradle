@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.mei_husky.qrcodescannerview"
+        applicationId "com.qingmei2.qrcodescannerview"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
