@@ -20,11 +20,10 @@ https://github.com/dlazaro66/QRCodeReaderView
 
 - [x] 二维码解析
 - [x] 前/后置摄像头切换扫描
-- [x] 打开闪光灯
 - [x] 开启/停止二维码扫描功能
 - [x] 自定义扫描界面UI，轻松定制自己的扫描框、扫描背景、扫描线相关属性
 - [x] 获得扫描框的坐标Rect(判断所扫二维码是否在扫描框内等)
-- [x] 我将会一直维护这个Library，完善其更多功能。如果有更多需求或者发现BUG，欢迎在Issues中提票！提前感谢！
+- [x] 【新功能创作中...】二维码（自定义Icon）生成
 
 ## 依赖和使用
 [![](https://jitpack.io/v/ButQingMei/QrCodeScannerView-Android.svg)](https://jitpack.io/#ButQingMei/QrCodeScannerView-Android)
