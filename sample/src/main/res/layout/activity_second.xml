@@ -9,6 +9,7 @@
         android:id="@+id/iv_qrcode_bg"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:background="#ff0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -19,8 +20,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Create QRCode"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_create2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/btn_create2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Create QRCode with Icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+         />
 
 </android.support.constraint.ConstraintLayout>
