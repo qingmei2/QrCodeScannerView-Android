@@ -1,4 +1,4 @@
-package com.qingmei2.library;
+package com.qingmei2.library.util;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.qingmei2.library.R;
 
 import java.util.HashMap;
 import java.util.Hashtable;
