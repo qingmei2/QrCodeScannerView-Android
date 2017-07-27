@@ -10,11 +10,13 @@ import com.qingmei2.library.util.QRCodeEncoder;
 
 /**
  * Created by QingMei on 2017/7/19.
- * desc:create QrCode
+ * desc:the guide creating Qrcode with any text
+ * {@link QRCodeEncoder}
  */
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView ivQRCode;
+
     private QRCodeEncoder qrCodeEncoder;
 
     @Override
