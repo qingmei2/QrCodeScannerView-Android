@@ -12,7 +12,6 @@ import com.qingmei2.library.util.QRCodeEncoder;
  * Created by QingMei on 2017/7/19.
  * desc:create QrCode
  */
-
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView ivQRCode;

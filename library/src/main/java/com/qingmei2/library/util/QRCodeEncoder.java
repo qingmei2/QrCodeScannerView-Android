@@ -27,30 +27,34 @@ public class QRCodeEncoder implements IQrCodeEncoder {
 
     private static final int NO_ICON_RES = 0;
 
-    private final Activity activity;
+    private Activity activity;
 
     public QRCodeEncoder(Activity activity) {
+        setActivity(activity);
+    }
+
+    public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
     @Override
     public Bitmap createQrCode(String content, int width) {
-        return createQrCode(content, width,NO_ICON_RES);
+        return createQrCode(content, width, NO_ICON_RES);
     }
 
     @Override
-    public Bitmap createQrCode(String content, int width,int iconRes) {
+    public Bitmap createQrCode(String content, int width, int iconRes) {
         return createQrCode(content, width, iconRes, true);
     }
 
     @Override
-    public Bitmap createQrCode(String content, int width,Drawable iconDrawable) {
+    public Bitmap createQrCode(String content, int width, Drawable iconDrawable) {
         return createQrCode(content, width, iconDrawable, true);
     }
 
     @Override
-    public Bitmap createQrCode(String content, int width,Bitmap iconBitmap) {
-        return createQrCode(content, width,iconBitmap, true);
+    public Bitmap createQrCode(String content, int width, Bitmap iconBitmap) {
+        return createQrCode(content, width, iconBitmap, true);
     }
 
     @Override
@@ -95,30 +99,40 @@ public class QRCodeEncoder implements IQrCodeEncoder {
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         int mScreenWidth = dm.widthPixels;
 
-        Bitmap qrCode = createQrCode(content, mScreenWidth,iconBitmap, hasIcon);
+        Bitmap qrCode = createQrCode(content, mScreenWidth, iconBitmap, hasIcon);
         if (qrCode != null) {
             imageView.setImageBitmap(qrCode);
         }
     }
 
     @Override
-    public Bitmap createQrCode(String content, int width,int iconRes, boolean hasIcon) {
+    public Bitmap createQrCode(String content, int width, int iconRes, boolean hasIcon) {
         Bitmap iconBitmap = null;
         if (iconRes != NO_ICON_RES)
             iconBitmap = getBitmapByRes(iconRes);
-        return createQrCode(content, width,iconBitmap, hasIcon);
+        return createQrCode(content, width, iconBitmap, hasIcon);
     }
 
     @Override
-    public Bitmap createQrCode(String content, int width,Drawable iconDrawable, boolean hasIcon) {
+    public Bitmap createQrCode(String content, int width, Drawable iconDrawable, boolean hasIcon) {
         Bitmap iconBitmap = null;
         if (iconDrawable != null)
             iconBitmap = getBitmapByDrawable(iconDrawable);
         return createQrCode(content, width, iconBitmap, hasIcon);
     }
 
+    /**
+     * Create QrCode with text content.
+     * We suggest that developer adjusts the content length, more content text means more difficult for scanning result on the device.
+     *
+     * @param content    QrCode content
+     * @param width      QrCode width&Height
+     * @param iconBitmap center icon if you want add icon in Bitmap
+     * @param hasIcon if false,iconBitmap will not show on QrCode bitmap
+     * @return QrCode bitmap
+     */
     @Override
-    public Bitmap createQrCode(String content, int width,Bitmap iconBitmap, boolean hasIcon) {
+    public Bitmap createQrCode(String content, int width, Bitmap iconBitmap, boolean hasIcon) {
         try {
             //配置参数
             Map<EncodeHintType, Object> hints = new HashMap<>();
@@ -128,7 +142,6 @@ public class QRCodeEncoder implements IQrCodeEncoder {
             // TODO set blank width, default is 4
             // hints.put(EncodeHintType.MARGIN, 2);
 
-//             图像数据转换，使用了矩阵转换
             BitMatrix bitMatrix = new QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, width, width, hints);
             int[] pixels = new int[width * width];
             // 下面这里按照二维码的算法，逐个生成二维码的图片，
