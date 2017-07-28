@@ -1,4 +1,4 @@
-package com.qingmei2.library.util;
+package com.qingmei2.library.encode;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

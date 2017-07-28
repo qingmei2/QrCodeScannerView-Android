@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.qingmei2.library.util.QRCodeEncoder;
+import com.qingmei2.library.encode.QRCodeEncoder;
 
 /**
  * Created by QingMei on 2017/7/19.

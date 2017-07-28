@@ -1,4 +1,4 @@
-package com.qingmei2.library.util;
+package com.qingmei2.library.encode;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -29,8 +29,11 @@ public class QRCodeEncoder implements IQrCodeEncoder {
 
     private Activity activity;
 
+    private BitmapCompressor bmpConpressor;
+
     public QRCodeEncoder(Activity activity) {
         setActivity(activity);
+        bmpConpressor = new BitmapCompressor();
     }
 
     public void setActivity(Activity activity) {
@@ -128,7 +131,7 @@ public class QRCodeEncoder implements IQrCodeEncoder {
      * @param content    QrCode content
      * @param width      QrCode width&Height
      * @param iconBitmap center icon if you want add icon in Bitmap
-     * @param hasIcon if false,iconBitmap will not show on QrCode bitmap
+     * @param hasIcon    if false,iconBitmap will not show on QrCode bitmap
      * @return QrCode bitmap
      */
     @Override
@@ -163,8 +166,9 @@ public class QRCodeEncoder implements IQrCodeEncoder {
             if (iconBitmap != null && hasIcon) {
                 bitmap = addIcon2QrCode(iconBitmap, bitmap);
             }
-            //TODO 必须使用compress方法将bitmap保存到文件中再进行读取。直接返回的bitmap是没有任何压缩的，内存消耗巨大！
-            return bitmap;
+
+            //compress bitmap
+            return bmpConpressor.compressBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
         }

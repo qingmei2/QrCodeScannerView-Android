@@ -1,6 +1,6 @@
 package com.qingmei2.library;
 
-import com.qingmei2.library.util.QRCodeEncoder;
+import com.qingmei2.library.encode.QRCodeEncoder;
 
 /**
  * Created by QingMei on 2017/7/19.
