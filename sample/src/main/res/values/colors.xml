@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="cover_bg">#aa616161</color>
-    <color name="cover_bg2">#aacccccc</color>
+    <color name="cover_bg">#33000000</color>
+    <color name="cover_bg2">#b41c99f7</color>
 
 </resources>

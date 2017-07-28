@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.qingmei2.library.view.QRCodeScannerView;
 import com.qingmei2.library.view.QRCoverView;
@@ -21,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private QRCodeScannerView mScannerView;
     private QRCoverView mCoverView;
+
+    private static final String TAG = "MainActivity";
 
     private final int PERMISSION_REQUEST_CAMERA = 0;
 
@@ -46,13 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //自动聚焦间隔2s
         mScannerView.setAutofocusInterval(2000L);
-        //闪光灯
-        mScannerView.setTorchEnabled(true);
         //扫描结果监听处理
         mScannerView.setOnQRCodeReadListener(new QRCodeScannerView.OnQRCodeScannerListener() {
             @Override
             public void onDecodeFinish(String text, PointF[] points) {
-                Log.d("tag", "扫描结果 ： " + text); //扫描到的内容
+                Log.d(TAG, "扫描结果 result -> " + text); //扫描到的内容
                 //【可选】判断二维码是否在扫描框中
                 judgeResult(text, points);
             }
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mScannerView.setBackCamera();
     }
 
-    private void judgeResult(String text, PointF[] points) {
+    private void judgeResult(String result, PointF[] points) {
         //接下来是处理二维码是否在扫描框中的逻辑
         RectF finderRect = mCoverView.getViewFinderRect();
         Log.d("tag", "points.length = " + points.length);
@@ -87,9 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (isContain) {
-            Toast.makeText(MainActivity.this, "扫描成功！Result = " + text, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ResultActivity.class).putExtra("result", result);
+            startActivity(intent);
         } else {
-            Toast.makeText(MainActivity.this, "扫描失败！请将二维码图片摆放在正确的扫描区域中...", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "扫描失败！请将二维码图片摆放在正确的扫描区域中...");
         }
     }
 
@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_test3:
                 //修改扫描框外背景色
-                mCoverView.setCoverViewOutsideColor(R.color.cover_bg2
-                );//提交修改UI
+                mCoverView.setCoverViewOutsideColor(R.color.cover_bg2);//提交修改UI
                 break;
             case R.id.btn_test4:
                 //不显示扫描线

@@ -19,12 +19,14 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
     private QRCodeEncoder qrCodeEncoder;
 
+    private String textContent = "https://github.com/qingmei2";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         findViewById(R.id.btn_create).setOnClickListener(this);
-        findViewById(R.id.btn_create2).setOnClickListener(this);
+        findViewById(R.id.btn_create_icon).setOnClickListener(this);
         qrCodeEncoder = new QRCodeEncoder(this);
         ivQRCode = (ImageView) findViewById(R.id.iv_qrcode_bg);
     }
@@ -33,10 +35,10 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_create:
-                qrCodeEncoder.createQrCode2ImageView("https://github.com/qingmei2", ivQRCode);
+                qrCodeEncoder.createQrCode2ImageView(textContent, ivQRCode);
                 break;
-            case R.id.btn_create2:
-                qrCodeEncoder.createQrCode2ImageView("https://github.com/qingmei2", ivQRCode, R.mipmap.ic_launcher);
+            case R.id.btn_create_icon:
+                qrCodeEncoder.createQrCode2ImageView(textContent, ivQRCode, R.mipmap.ic_launcher);
                 break;
         }
     }

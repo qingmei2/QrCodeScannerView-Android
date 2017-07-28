@@ -93,7 +93,6 @@ public class QRCoverView extends View {
         drawScanCorner(canvas, viewFinderRect);
         //绘制扫描线
         drawLaserLine(canvas, viewFinderRect);
-
     }
 
     /**

@@ -14,6 +14,16 @@ import java.io.ByteArrayOutputStream;
 
 public class BitmapCompressor implements IBitmapCompressor {
 
+    private int bmpQuality = 64 * 1024;    //compress bitmap size -> 64k
+
+    /**
+     * set compress bitmap size,with unit KB,default value is 64KB
+     * @param bmpQuality
+     */
+    public void setBmpQuality(int bmpQuality) {
+        this.bmpQuality = bmpQuality * 1024;
+    }
+
     @Override
     public Bitmap compressBitmap(Bitmap bmp) {
         byte[] bytes = compressBitmap2ByteArray(bmp);
@@ -26,20 +36,20 @@ public class BitmapCompressor implements IBitmapCompressor {
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, output);
         float zoom = (float) Math.sqrt(32 * 1024 / (float) output.toByteArray().length); //获取缩放比例
 
-        // 设置矩阵数据
+        // set Rect datas
         Matrix matrix = new Matrix();
         matrix.setScale(zoom, zoom);
 
-        // 根据矩阵数据进行新bitmap的创建
+        // create new bitmap with Rect datas
         Bitmap resultBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
 
         output.reset();
 
         resultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
 
-        // 如果进行了上面的压缩后，依旧大于32K，就进行小范围的微调压缩
-        while (output.toByteArray().length > 32 * 1024) {
-            matrix.setScale(0.9f, 0.9f);//每次缩小 1/10
+        // if result still > bmpQuality,compress bitmap continue.
+        while (output.toByteArray().length > bmpQuality) {
+            matrix.setScale(0.9f, 0.9f);//scale 0.1 every time
 
             resultBitmap = Bitmap.createBitmap(
                     resultBitmap, 0, 0,

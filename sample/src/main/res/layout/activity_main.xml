@@ -18,8 +18,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,21 +33,31 @@
 
             <Button
                 android:id="@+id/btn_test1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="设置扫描框大小" />
+                android:layout_weight="1"
+                android:text="扫描框大小" />
 
             <Button
                 android:id="@+id/btn_test2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="切换摄像头" />
 
             <Button
                 android:id="@+id/btn_test3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="设置背景色" />
+
+            <Button
+                android:id="@+id/btn_test6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="外边框" />
 
         </LinearLayout>
 
@@ -53,34 +68,37 @@
 
             <Button
                 android:id="@+id/btn_test4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="隐藏扫描线" />
+                android:layout_weight="1"
+                android:text="隐藏扫描线"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btn_test5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="显示扫描线" />
-
-            <Button
-                android:id="@+id/btn_test6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="外边框" />
+                android:layout_weight="1"
+                android:text="显示扫描线"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btn_test7"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="停止扫描" />
+                android:layout_weight="1"
+                android:text="停止扫描"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btn_test8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="生成二维码 ->" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_test8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="打开SecondActivity" />
+
     </LinearLayout>
 </FrameLayout>
