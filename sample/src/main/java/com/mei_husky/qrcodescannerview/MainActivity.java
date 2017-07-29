@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 权限请求回调
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -129,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_test1:
                 //扫描框的宽度和高度
-                mCoverView.setCoverViewScanner(220, 220);//提交修改UI
+                mCoverView.setCoverViewScanner(280, 280);//提交修改UI
                 break;
             case R.id.btn_test2:
                 mScannerView.switchCameraFace();//切换摄像头

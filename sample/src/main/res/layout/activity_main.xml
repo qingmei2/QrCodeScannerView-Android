@@ -21,8 +21,8 @@
         app:cornerWidth="3dp"
         app:laserColor="@color/color_laser"
         app:laserVisible="true"
-        app:scanRectHeight="240dp"
-        app:scanRectWidth="240dp" />
+        app:scanRectHeight="150dp"
+        app:scanRectWidth="150dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

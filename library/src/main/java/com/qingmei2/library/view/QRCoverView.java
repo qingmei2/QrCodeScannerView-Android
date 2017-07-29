@@ -79,13 +79,13 @@ public class QRCoverView extends View {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.QRCoverView);
         try {
             //默认扫描框大小为180dp,分母为扫描框所处View位置的大概比例，若有需求可以自己修改
-            float width = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
+            scannerW = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
                     ScannerDpUtils.dip2px(context, 180));
-            left = (displayMetrics.widthPixels - width) / 2;
+            left = (displayMetrics.widthPixels - scannerW) / 2;
 
-            float height = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
+            scannerH = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
                     ScannerDpUtils.dip2px(context, 180));
-            top = (displayMetrics.heightPixels - height) / 3;
+            top = (displayMetrics.heightPixels - scannerH) / 3;
 
             //默认扫描框为16dp长，3dp宽
             cornerLength = typedArray.getDimension(R.styleable.QRCoverView_cornerLength,
@@ -113,7 +113,7 @@ public class QRCoverView extends View {
     protected void onDraw(Canvas canvas) {
         //默认扫描框为180dp
         if (scannerW == 0f || scannerH == 0f) {
-            viewFinderRect = new RectF(left, top, left + ScannerDpUtils.dip2px(context, 180), top + ScannerDpUtils.dip2px(context, 180));
+            viewFinderRect = new RectF(left, top, ScannerDpUtils.dip2px(context, 180), top + ScannerDpUtils.dip2px(context, 180));
         } else {
             viewFinderRect = new RectF(left, top, left + scannerW, top + scannerH);
         }
