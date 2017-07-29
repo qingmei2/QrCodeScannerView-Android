@@ -195,21 +195,21 @@ qrCodeEncoder.createQrCode2ImageView(textContent, ivQRCode, R.mipmap.ic_launcher
 ![create_demo_normal](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_normal.png)
 ![create_demo_icon](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_icon.png)
 
-### 「重要」如果有更多需求，建议阅读QRCoverView.java的源码，或者提Issues，我会在第一时间回复
+#### 「重要」如果有更多需求，建议阅读QRCoverView.java的源码，或者提Issues，我会在第一时间回复
 
 ## 常见问题：
 
-### 1、gradle编译冲突怎么回事？
-
+## 1、gradle编译冲突怎么回事？
 QrCodeScannerView 本身是基于Zxing 3.2.1实现的，所以在Compile QrCodeScannerView的时候会自动Compile Zxing 3.2.1库，如果您的项目中用了其他二维码扫描库引起冲突（比如其他版本的Zxing），请放心将其移除。
 
-### 2、QrCodeScannerView不支持相册识别读取二维码吗？不支持本地生成二维码并存储吗？
+## 2、QrCodeScannerView不支持相册识别读取二维码吗？不支持本地生成二维码并存储吗？
 关于「相册识别解析二维码」是笔者准备马上添加的功能，关于「本地生成二维码并存储」，QrCodeEncoder已经能够生成Bitmap返回（已经进行简单压缩处理），如果有需求，可以google或者百度，封装简单的工具类，将Bitmap存储本地即可。
 
-### 3、QrCodeScannerView不支持识别条形码吗？
-正如
+## 3、QrCodeScannerView不支持识别条形码吗？
+正如这个library的名字所述，QrCodeScannerView是一个简单的二维码扫描控件，暂时还没有准备添加条形码识别的支持。
 
 
+## 改动日志
 ### v1.1.2
 #### Add:
 * QrCodeEncoder
@@ -218,7 +218,7 @@ The assistant class can help you create a QR code bitmap into ImageView.
 now you can use attributes in your layout.
 
 
-## 二维码扫描效果示例
+## 效果示例
 
 1.解析二维码
 
