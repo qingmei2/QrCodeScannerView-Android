@@ -1,4 +1,5 @@
 # QrCodeScannerView-Android
+### 简单易上手的 Android 扫描二维码控件
 # 中文文档
 [![](https://www.jitpack.io/v/qingmei2/QrCodeScannerView-Android.svg)](https://www.jitpack.io/#qingmei2/QrCodeScannerView-Android)
 
