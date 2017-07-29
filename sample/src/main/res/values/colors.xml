@@ -6,5 +6,7 @@
 
     <color name="cover_bg">#33000000</color>
     <color name="cover_bg2">#b41c99f7</color>
+    <color name="color_outside_bg">#0a9610</color>
+    <color name="color_laser">#2ec935</color>
 
 </resources>

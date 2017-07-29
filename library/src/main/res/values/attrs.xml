@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="QRCoverView">
+        <attr name="scanRectWidth" format="dimension"/>
+        <attr name="scanRectHeight" format="dimension"/>
+
+        <attr name="cornerLength" format="dimension"/>
+        <attr name="cornerWidth" format="dimension"/>
+        <attr name="cornerOutside" format="boolean"/>
+
+        <attr name="cornerColor" format="color"/>
+        <attr name="outsideBackgroundColor" format="color"/>
+        <!--<attr name="innerBackgroundColor" format="color"/>-->
+
+        <attr name="laserVisible" format="boolean"/>
+        <attr name="laserColor" format="color"/>
+    </declare-styleable>
+
+</resources>

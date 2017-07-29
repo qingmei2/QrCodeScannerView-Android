@@ -1,6 +1,7 @@
 package com.qingmei2.library.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -27,10 +28,9 @@ import java.lang.ref.WeakReference;
 public class QRCoverView extends View {
 
     //背景色
-    private final Paint paint = new Paint();
+    private final Paint outsidePaint = new Paint();
     //扫描边框角的颜色
     private final Paint cornerPaint = new Paint();
-
 
     //扫描线相关属性,设置方式详见以下方法：
     /**
@@ -38,9 +38,10 @@ public class QRCoverView extends View {
      */
 
     private final Paint laserPaint = new Paint();   //扫描线Paint
+    private int laserColor;
     private boolean showLaser = true;      //是否显示扫描线
     private float laserStartH = 0f;        //扫描线初始位置
-    private int laserChangeBounds = 30;    //渐变线的默认高度，默认30px
+    private int laserChangeBounds = 20;    //渐变线的默认高度，默认20px
     private int laserChangeTime = 40;      //UI刷新间隔
 
     private QRHandler handler;
@@ -52,8 +53,8 @@ public class QRCoverView extends View {
     private float top;
     private float left;
     //扫描边框的长度和厚度
-    private float cornerH;
-    private float cornerW;
+    private float cornerLength;
+    private float cornerWidth;
     private Context context;
     //扫描边框是否包裹扫描框
     private boolean isCornerOutside = false;
@@ -64,19 +65,48 @@ public class QRCoverView extends View {
         super(context, attrs);
         this.context = context;
 
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-
-        //默认扫描框大小为180dp,分母为扫描框所处View位置的大概比例，若有需求可以自己修改
-        left = (displayMetrics.widthPixels - ScannerDpUtils.dip2px(context, 180)) / 2;
-        top = (displayMetrics.heightPixels - ScannerDpUtils.dip2px(context, 180)) / 3;
-        //默认扫描框为16dp长，3dp宽
-        cornerH = ScannerDpUtils.dip2px(context, 16);
-        cornerW = ScannerDpUtils.dip2px(context, 3);
-        //默认背景色和扫描边框颜色（请在自己项目的res.values.color下进行设置）
-        paint.setColor(ContextCompat.getColor(getContext(), R.color.cover_bg));
-        cornerPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-
+        initAttrs(context, attrs);
         handler = new QRHandler(this);
+    }
+
+    private void initAttrs(final Context context, final AttributeSet attrs) {
+        final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//        Log.i("tag", "Before ->" + displayMetrics.widthPixels + " === " + displayMetrics.heightPixels);
+//        final Activity activity = (Activity) context;
+//        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        Log.i("tag", "after ->" + displayMetrics.widthPixels + " === " + displayMetrics.heightPixels);
+
+        final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.QRCoverView);
+        try {
+            //默认扫描框大小为180dp,分母为扫描框所处View位置的大概比例，若有需求可以自己修改
+            float width = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
+                    ScannerDpUtils.dip2px(context, 180));
+            left = (displayMetrics.widthPixels - width) / 2;
+
+            float height = typedArray.getDimension(R.styleable.QRCoverView_scanRectWidth,
+                    ScannerDpUtils.dip2px(context, 180));
+            top = (displayMetrics.heightPixels - height) / 3;
+
+            //默认扫描框为16dp长，3dp宽
+            cornerLength = typedArray.getDimension(R.styleable.QRCoverView_cornerLength,
+                    ScannerDpUtils.dip2px(context, 16));
+            cornerWidth = typedArray.getDimension(R.styleable.QRCoverView_cornerWidth,
+                    ScannerDpUtils.dip2px(context, 3));
+            isCornerOutside = typedArray.getBoolean(R.styleable.QRCoverView_cornerOutside, false);
+
+
+            //默认背景色和扫描边框颜色（请在自己项目的res.values.color下进行设置）
+            outsidePaint.setColor(typedArray.getColor(R.styleable.QRCoverView_outsideBackgroundColor,
+                    ContextCompat.getColor(context, R.color.cover_bg)));
+            cornerPaint.setColor(typedArray.getColor(R.styleable.QRCoverView_cornerColor,
+                    ContextCompat.getColor(context, R.color.colorPrimaryDark)));
+            laserColor = typedArray.getColor(R.styleable.QRCoverView_laserColor,
+                    ContextCompat.getColor(context, android.R.color.white));
+
+            showLaser = typedArray.getBoolean(R.styleable.QRCoverView_laserVisible, true);
+        } finally {
+            typedArray.recycle();
+        }
     }
 
     @Override
@@ -115,7 +145,7 @@ public class QRCoverView extends View {
             mPath.addRect(viewFinderRect, Path.Direction.CW);
             canvas.clipPath(mPath, Region.Op.REPLACE);
             //渐变色的扫描线（白色->透明）
-            LinearGradient linearGradient = new LinearGradient(0, laserStartH - laserChangeBounds, 0, laserStartH, new int[]{Color.TRANSPARENT, Color.WHITE}, null, Shader.TileMode.CLAMP);
+            LinearGradient linearGradient = new LinearGradient(0, laserStartH - laserChangeBounds, 0, laserStartH, new int[]{Color.TRANSPARENT, laserColor}, null, Shader.TileMode.CLAMP);
             //给扫描线Paint设置着色器并绘制
             laserPaint.setShader(linearGradient);
             canvas.drawRect(0, laserStartH - laserChangeBounds, getWidth(), laserStartH, laserPaint);
@@ -138,11 +168,11 @@ public class QRCoverView extends View {
      * @param viewFinderRect
      */
     private void drawScanBackground(Canvas canvas, RectF viewFinderRect) {
-        canvas.drawRect(0, 0, viewFinderRect.left, getHeight(), paint);
-        canvas.drawRect(viewFinderRect.left, 0, getWidth(), viewFinderRect.top, paint);
-        canvas.drawRect(viewFinderRect.right, viewFinderRect.top, getWidth(), getHeight(), paint);
+        canvas.drawRect(0, 0, viewFinderRect.left, getHeight(), outsidePaint);
+        canvas.drawRect(viewFinderRect.left, 0, getWidth(), viewFinderRect.top, outsidePaint);
+        canvas.drawRect(viewFinderRect.right, viewFinderRect.top, getWidth(), getHeight(), outsidePaint);
         canvas.drawRect(viewFinderRect.left, viewFinderRect.bottom, viewFinderRect.right,
-                getHeight(), paint);
+                getHeight(), outsidePaint);
     }
 
     /**
@@ -154,40 +184,40 @@ public class QRCoverView extends View {
     private void drawScanCorner(Canvas canvas, RectF viewFinderRect) {
         //扫描边框在扫描框外部
         if (isCornerOutside) {
-            canvas.drawRect(viewFinderRect.left - cornerW, viewFinderRect.top - cornerW,
-                    viewFinderRect.left, viewFinderRect.top + cornerH - cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.left, viewFinderRect.top - cornerW,
-                    viewFinderRect.left + cornerH - cornerW, viewFinderRect.top, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerH + cornerW, viewFinderRect.top - cornerW,
-                    viewFinderRect.right + cornerW, viewFinderRect.top, cornerPaint);
-            canvas.drawRect(viewFinderRect.right, viewFinderRect.top, viewFinderRect.right + cornerW,
-                    viewFinderRect.top + cornerH - cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.right, viewFinderRect.bottom - cornerH + cornerW,
-                    viewFinderRect.right + cornerW, viewFinderRect.bottom + cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerH + cornerW, viewFinderRect.bottom,
-                    viewFinderRect.right, viewFinderRect.bottom + cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.left - cornerW, viewFinderRect.bottom - cornerH + cornerW,
-                    viewFinderRect.left, viewFinderRect.bottom + cornerW, cornerPaint);
+            canvas.drawRect(viewFinderRect.left - cornerWidth, viewFinderRect.top - cornerWidth,
+                    viewFinderRect.left, viewFinderRect.top + cornerLength - cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.left, viewFinderRect.top - cornerWidth,
+                    viewFinderRect.left + cornerLength - cornerWidth, viewFinderRect.top, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerLength + cornerWidth, viewFinderRect.top - cornerWidth,
+                    viewFinderRect.right + cornerWidth, viewFinderRect.top, cornerPaint);
+            canvas.drawRect(viewFinderRect.right, viewFinderRect.top, viewFinderRect.right + cornerWidth,
+                    viewFinderRect.top + cornerLength - cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.right, viewFinderRect.bottom - cornerLength + cornerWidth,
+                    viewFinderRect.right + cornerWidth, viewFinderRect.bottom + cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerLength + cornerWidth, viewFinderRect.bottom,
+                    viewFinderRect.right, viewFinderRect.bottom + cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.left - cornerWidth, viewFinderRect.bottom - cornerLength + cornerWidth,
+                    viewFinderRect.left, viewFinderRect.bottom + cornerWidth, cornerPaint);
             canvas.drawRect(viewFinderRect.left, viewFinderRect.bottom,
-                    viewFinderRect.left + cornerH - cornerW, viewFinderRect.bottom + cornerW, cornerPaint);
+                    viewFinderRect.left + cornerLength - cornerWidth, viewFinderRect.bottom + cornerWidth, cornerPaint);
         } else {
             //扫描边框在扫描框内部
             canvas.drawRect(viewFinderRect.left, viewFinderRect.top,
-                    viewFinderRect.left + cornerW, viewFinderRect.top + cornerH, cornerPaint);
-            canvas.drawRect(viewFinderRect.left + cornerW, viewFinderRect.top,
-                    viewFinderRect.left + cornerH, viewFinderRect.top + cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerH, viewFinderRect.top,
-                    viewFinderRect.right, viewFinderRect.top + cornerW, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerW, viewFinderRect.top + cornerW, viewFinderRect.right,
-                    viewFinderRect.top + cornerH, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerW, viewFinderRect.bottom - cornerH,
+                    viewFinderRect.left + cornerWidth, viewFinderRect.top + cornerLength, cornerPaint);
+            canvas.drawRect(viewFinderRect.left + cornerWidth, viewFinderRect.top,
+                    viewFinderRect.left + cornerLength, viewFinderRect.top + cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerLength, viewFinderRect.top,
+                    viewFinderRect.right, viewFinderRect.top + cornerWidth, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerWidth, viewFinderRect.top + cornerWidth, viewFinderRect.right,
+                    viewFinderRect.top + cornerLength, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerWidth, viewFinderRect.bottom - cornerLength,
                     viewFinderRect.right, viewFinderRect.bottom, cornerPaint);
-            canvas.drawRect(viewFinderRect.right - cornerH, viewFinderRect.bottom - cornerW,
-                    viewFinderRect.right - cornerW, viewFinderRect.bottom, cornerPaint);
-            canvas.drawRect(viewFinderRect.left, viewFinderRect.bottom - cornerH,
-                    viewFinderRect.left + cornerW, viewFinderRect.bottom, cornerPaint);
-            canvas.drawRect(viewFinderRect.left + cornerW, viewFinderRect.bottom - cornerW,
-                    viewFinderRect.left + cornerH, viewFinderRect.bottom, cornerPaint);
+            canvas.drawRect(viewFinderRect.right - cornerLength, viewFinderRect.bottom - cornerWidth,
+                    viewFinderRect.right - cornerWidth, viewFinderRect.bottom, cornerPaint);
+            canvas.drawRect(viewFinderRect.left, viewFinderRect.bottom - cornerLength,
+                    viewFinderRect.left + cornerWidth, viewFinderRect.bottom, cornerPaint);
+            canvas.drawRect(viewFinderRect.left + cornerWidth, viewFinderRect.bottom - cornerWidth,
+                    viewFinderRect.left + cornerLength, viewFinderRect.bottom, cornerPaint);
         }
     }
 
@@ -197,7 +227,7 @@ public class QRCoverView extends View {
      * @param colorRes
      */
     public QRCoverView setCoverViewOutsideColor(int colorRes) {
-        paint.setColor(getResources().getColor(colorRes));
+        outsidePaint.setColor(getResources().getColor(colorRes));
         commitUi();
         return this;
     }
@@ -222,11 +252,11 @@ public class QRCoverView extends View {
      */
     public QRCoverView setCoverViewCorner(int cornerH, int cornerW, boolean isDp) {
         if (isDp) {
-            this.cornerH = ScannerDpUtils.dip2px(context, cornerH);
-            this.cornerW = ScannerDpUtils.dip2px(context, cornerW);
+            this.cornerLength = ScannerDpUtils.dip2px(context, cornerH);
+            this.cornerWidth = ScannerDpUtils.dip2px(context, cornerW);
         } else {
-            this.cornerH = cornerH;
-            this.cornerW = cornerW;
+            this.cornerLength = cornerH;
+            this.cornerWidth = cornerW;
         }
         commitUi();
         return this;

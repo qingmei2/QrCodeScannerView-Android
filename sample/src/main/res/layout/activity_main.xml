@@ -14,7 +14,15 @@
     <com.qingmei2.library.view.QRCoverView
         android:id="@+id/cover_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:cornerColor="@color/color_outside_bg"
+        app:cornerLength="16dp"
+        app:cornerOutside="false"
+        app:cornerWidth="3dp"
+        app:laserColor="@color/color_laser"
+        app:laserVisible="true"
+        app:scanRectHeight="240dp"
+        app:scanRectWidth="240dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
