@@ -8,8 +8,8 @@
 
 ## Index
 * [Introduction](#Introduction)
-* [Use it](#Use it)
-* [Change Log](#Change Log)
+* [Useit](#Useit)
+* [ChangeLog](#ChangeLog)
 * [ScanResult](#ScanResult)
 
 ## Introduction
@@ -29,7 +29,7 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] It's convenient for customing your scan screen UI
 - [x] 【coming soon...】decode QrCode picture in Android devices
 
-## Use it
+## Useit
 
 ### 1. Project  Build.gradle:
 ```
@@ -186,7 +186,7 @@ Result：
 ![create_demo_normal](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_normal.png)
 ![create_demo_icon](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_icon.png)
 
-## Change Log
+## ChangeLog
 ### v1.1.2
 #### Add:
 * QrCodeEncoder
