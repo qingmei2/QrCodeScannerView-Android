@@ -162,8 +162,19 @@ mScannerView.setBackCamera();
 ### 3、QRCodeEncoder 二维码生成相关（1.1.2版本新增）
 
 在1.1.2版本中，笔者为开发者封装了简单的二维码生成功能
+#### 使用方式
+直接new一个就可以了：
 
+```
+//构造方法：
+public QRCodeEncoder(Activity activity)
+//activity中使用：
+qrCodeEncoder = new QRCodeEncoder(this);  //初始化
 
+qrCodeEncoder.createQrCode2ImageView(textContent, ivQRCode);//生成二维码
+//或者
+qrCodeEncoder.createQrCode2ImageView(textContent, ivQRCode, R.mipmap.ic_launcher);//生成带Icon的二维码
+```
 
 |方法名                                                                    |方法说明                    |补充 |
 | -------------                                                           | -------------             | -----|
@@ -175,16 +186,29 @@ mScannerView.setBackCamera();
 
 当然不止这么简单，我们提供了各种各样的重载方法：
 #### Bitmap createQrCode():
+![createQrcode](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/createQrcode.png)
 
 #### void createQrCode2ImageView():
+![create2ImageView](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create2ImageView.png)
 
 效果实例：
-
+![create_demo_normal](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_normal.png)
+![create_demo_icon](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_icon.png)
 
 ### 「重要」如果有更多需求，建议阅读QRCoverView.java的源码，或者提Issues，我会在第一时间回复
 
+## 常见问题：
 
-## 改动日志：
+### 1、gradle编译冲突怎么回事？
+
+QrCodeScannerView 本身是基于Zxing 3.2.1实现的，所以在Compile QrCodeScannerView的时候会自动Compile Zxing 3.2.1库，如果您的项目中用了其他二维码扫描库引起冲突（比如其他版本的Zxing），请放心将其移除。
+
+### 2、QrCodeScannerView不支持相册识别读取二维码吗？不支持本地生成二维码并存储吗？
+关于「相册识别解析二维码」是笔者准备马上添加的功能，关于「本地生成二维码并存储」，QrCodeEncoder已经能够生成Bitmap返回（已经进行简单压缩处理），如果有需求，可以google或者百度，封装简单的工具类，将Bitmap存储本地即可。
+
+### 3、QrCodeScannerView不支持识别条形码吗？
+正如
+
 
 ### v1.1.2
 #### Add:
