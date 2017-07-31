@@ -11,9 +11,9 @@
 * [Introduction](#Introduction)
 * [Usage](#Usage)
 * [ChangeLog](#ChangeLog)
-* [ScanResult](##ScanResult)
+* [ScanResult](#ScanResult)
 
-## Introduction
+## <span id="Introduction">Introduction</span>
 
 QrCodeScannerView-Android is a simple tool that can help you decode Qr Code and create a Qr code by content
 
@@ -30,7 +30,7 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] It's convenient for customing your scan screen UI
 - [x] 【coming soon...】decode QrCode picture in Android devices
 
-## Usage
+## <span id="Usage">Usage</span>
 
 ### 1. Add code into your Project Build.gradle:
 ```
