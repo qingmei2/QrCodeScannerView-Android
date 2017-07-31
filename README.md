@@ -13,7 +13,7 @@
 * [ChangeLog](#ChangeLog)
 * [ScanResult](#ScanResult)
 
-## <span id="Introduction">Introduction</span>
+## <h2 id="Introduction">Introduction</h2>
 
 QrCodeScannerView-Android is a simple tool that can help you decode Qr Code and create a Qr code by content
 
@@ -30,7 +30,7 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] It's convenient for customing your scan screen UI
 - [x] 【coming soon...】decode QrCode picture in Android devices
 
-## <span id="Usage">Usage</span>
+## <h2 id="Usage">Usage</h2>
 
 ### 1. Add code into your Project Build.gradle:
 ```
@@ -187,7 +187,7 @@ Result：
 ![create_demo_normal](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_normal.png)
 ![create_demo_icon](https://github.com/qingmei2/QrCodeScannerView-Android/blob/master/pic/create_demo_icon.png)
 
-## ChangeLog
+## <h2 id="ChangeLog">ChangeLog</h2>
 ### v1.1.2
 #### Add:
 * QrCodeEncoder
@@ -196,7 +196,7 @@ The assistant class can help you create a QR code bitmap into ImageView.
 now you can use attributes in your layout.
 
 
-## ScanResult
+## <h2 id="ScanResult">ScanResult</h2>
 
 ![scanResult](https://github.com/ButQingMei/QrCodeScannerView-Android/blob/master/pic/scanResult.gif)
 
