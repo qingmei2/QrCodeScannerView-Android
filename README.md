@@ -9,7 +9,7 @@
 
 ## Index
 * [Introduction](#Introduction)
-* [Useit](#Useit)
+* [UseIt](#UseIt)
 * [ChangeLog](#ChangeLog)
 * [ScanResult](#ScanResult)
 
@@ -30,9 +30,9 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] It's convenient for customing your scan screen UI
 - [x] 【coming soon...】decode QrCode picture in Android devices
 
-## Useit
+## UseIt
 
-### 1. Project  Build.gradle:
+### 1. Add code into your Project Build.gradle:
 ```
 allprojects {
   repositories {
@@ -41,7 +41,7 @@ allprojects {
   }
 }
 ```
-### 2.Module  Build.gradle:
+### 2.Add code into your Module Build.gradle:
 ```
 dependencies {
     compile 'com.github.qingmei2:QrCodeScannerView-Android:1.1.2'
@@ -55,7 +55,7 @@ dependencies {
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 ```
-### 4.add views in your activity_layout:
+### 4.Add views in your activity_layout:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
