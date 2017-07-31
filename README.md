@@ -9,9 +9,9 @@
 
 ## Index
 * [Introduction](#Introduction)
-* [UseIt](#UseIt)
+* [Usage](#Usage)
 * [ChangeLog](#ChangeLog)
-* [ScanResult](#ScanResult)
+* [ScanResult](##ScanResult)
 
 ## Introduction
 
@@ -30,7 +30,7 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] It's convenient for customing your scan screen UI
 - [x] 【coming soon...】decode QrCode picture in Android devices
 
-## UseIt
+## Usage
 
 ### 1. Add code into your Project Build.gradle:
 ```
