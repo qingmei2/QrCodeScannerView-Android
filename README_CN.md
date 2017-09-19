@@ -1,9 +1,10 @@
 # QrCodeScannerView-Android
-### 简单易上手的 Android 扫描二维码控件
+### 简单易上手的 Android 扫描二维码控件 @Alpha
 # 中文文档
 [![](https://www.jitpack.io/v/qingmei2/QrCodeScannerView-Android.svg)](https://www.jitpack.io/#qingmei2/QrCodeScannerView-Android)
 
 ## 如果您遇到了什么问题（使用问题，或者遇到了bug），欢迎Issues！感谢您使用QrCodeScannerView-Android！
+目前该库仍处于alpha测试版，建议使用场景为个人项目||小型项目，大型项目不建议使用该库！
 
 ## 目录
 * [功能简介](#功能简介)
@@ -31,7 +32,7 @@ https://github.com/dlazaro66/QRCodeReaderView
 - [x] 开启/停止二维码扫描功能
 - [x] 自定义扫描界面UI，轻松定制自己的扫描框、扫描背景、扫描线相关属性
 - [x] 获得扫描框的坐标Rect(判断所扫二维码是否在扫描框内等)
-- [x] 【1.1.3版本创作中...】生成二维码图片并保存、相册解析二维码图片等
+- [x] 【1.1.3版本重构创作中...】生成二维码图片并保存、相册解析二维码图片等
 
 ## 依赖和使用
 
@@ -209,6 +210,8 @@ QrCodeScannerView 本身是基于Zxing 3.2.1实现的，所以在Compile QrCodeS
 ## 3、QrCodeScannerView不支持识别条形码吗？
 正如这个library的名字所述，QrCodeScannerView是一个简单的二维码扫描控件，暂时还没有准备添加条形码识别的支持。
 
+## 已知BUG：
+暂无。
 
 ## 改动日志
 ### v1.1.2
