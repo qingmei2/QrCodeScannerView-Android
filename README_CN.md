@@ -4,7 +4,6 @@
 [![](https://www.jitpack.io/v/qingmei2/QrCodeScannerView-Android.svg)](https://www.jitpack.io/#qingmei2/QrCodeScannerView-Android)
 
 ## 如果您遇到了什么问题（使用问题，或者遇到了bug），欢迎Issues！感谢您使用QrCodeScannerView-Android！
-目前该库仍处于alpha测试版，建议使用场景为个人项目||小型项目，大型项目不建议使用该库！
 
 ## 目录
 * [功能简介](#功能简介)
