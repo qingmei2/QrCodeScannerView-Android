@@ -1,3 +1,5 @@
+# @Deprecated
+
 # QrCodeScannerView-Android
 
 [![](https://www.jitpack.io/v/qingmei2/QrCodeScannerView-Android.svg)](https://www.jitpack.io/#qingmei2/QrCodeScannerView-Android)
