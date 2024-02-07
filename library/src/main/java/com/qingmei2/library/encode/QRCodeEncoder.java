@@ -225,10 +225,10 @@ public class QRCodeEncoder implements IQrCodeEncoder {
         try {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(qrCode, 0, 0, null);
-            canvas.scale(scaleFactor, scaleFactor, srcWidth / 2, srcHeight / 2);
-            canvas.drawBitmap(icon, (srcWidth - iconWidth) / 2, (srcHeight - iconHeight) / 2, null);
+            canvas.scale(scaleFactor, scaleFactor, (float) srcWidth / 2, (float) srcHeight / 2);
+            canvas.drawBitmap(icon, (float) (srcWidth - iconWidth) / 2, (float) (srcHeight - iconHeight) / 2, null);
 
-            canvas.save(Canvas.ALL_SAVE_FLAG);
+            canvas.save();
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
